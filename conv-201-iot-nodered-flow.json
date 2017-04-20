@@ -1,0 +1,249 @@
+[
+    {
+        "id": "f0d2bda1.f5c1c",
+        "type": "tab",
+        "label": "Flow 1"
+    },
+    {
+        "id": "3f92bc3.8894dc4",
+        "type": "http in",
+        "z": "f0d2bda1.f5c1c",
+        "name": "Input",
+        "url": "/watson-chatbot",
+        "method": "post",
+        "swaggerDoc": "",
+        "x": 90,
+        "y": 120,
+        "wires": [
+            [
+                "d4f4a2a3.ea946",
+                "3a0fccb2.1aaf04"
+            ]
+        ]
+    },
+    {
+        "id": "3a0fccb2.1aaf04",
+        "type": "debug",
+        "z": "f0d2bda1.f5c1c",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "false",
+        "x": 270,
+        "y": 60,
+        "wires": []
+    },
+    {
+        "id": "d4f4a2a3.ea946",
+        "type": "switch",
+        "z": "f0d2bda1.f5c1c",
+        "name": "Authentication",
+        "property": "payload.token",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "vH8Yx1kA9fK0sj3oENhnrjow",
+                "vt": "str"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "true",
+        "outputs": 2,
+        "x": 260,
+        "y": 120,
+        "wires": [
+            [
+                "b1da0666.0a1be8"
+            ],
+            [
+                "a8a55c17.1143c"
+            ]
+        ]
+    },
+    {
+        "id": "b1da0666.0a1be8",
+        "type": "function",
+        "z": "f0d2bda1.f5c1c",
+        "name": "Prepare for Conversation",
+        "func": "msg.payload = msg.payload.text;\nreturn msg;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 508,
+        "y": 78,
+        "wires": [
+            [
+                "a33f0882.686158",
+                "ec105282.425ee8"
+            ]
+        ]
+    },
+    {
+        "id": "2ab7c251.73c8c6",
+        "type": "http response",
+        "z": "f0d2bda1.f5c1c",
+        "name": "",
+        "x": 626,
+        "y": 227,
+        "wires": []
+    },
+    {
+        "id": "a7d65b13.7e7498",
+        "type": "http response",
+        "z": "f0d2bda1.f5c1c",
+        "name": "",
+        "x": 1244,
+        "y": 99,
+        "wires": []
+    },
+    {
+        "id": "a33f0882.686158",
+        "type": "watson-conversation-v1",
+        "z": "f0d2bda1.f5c1c",
+        "name": "",
+        "workspaceid": "545e1fbf-9e53-4bb8-a2f4-b59c1553d0e4",
+        "multiuser": false,
+        "context": true,
+        "x": 739,
+        "y": 144,
+        "wires": [
+            [
+                "616dbd7c.8acc8c",
+                "856150ec.077fa8"
+            ]
+        ]
+    },
+    {
+        "id": "856150ec.077fa8",
+        "type": "function",
+        "z": "f0d2bda1.f5c1c",
+        "name": "Response from Conversation",
+        "func": "msg.payload = msg.payload.output.text + \"\";\nreturn msg;\n",
+        "outputs": "1",
+        "noerr": 0,
+        "x": 993,
+        "y": 99,
+        "wires": [
+            [
+                "a7d65b13.7e7498"
+            ]
+        ]
+    },
+    {
+        "id": "ec105282.425ee8",
+        "type": "debug",
+        "z": "f0d2bda1.f5c1c",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "payload",
+        "x": 758,
+        "y": 44,
+        "wires": []
+    },
+    {
+        "id": "a8a55c17.1143c",
+        "type": "change",
+        "z": "f0d2bda1.f5c1c",
+        "name": "Invalid token provided",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "Invalid authentication token provided",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 480,
+        "y": 140,
+        "wires": [
+            [
+                "2ab7c251.73c8c6"
+            ]
+        ]
+    },
+    {
+        "id": "9ccd91dd.46b48",
+        "type": "http in",
+        "z": "f0d2bda1.f5c1c",
+        "name": "HTML",
+        "url": "/watson-chatbot",
+        "method": "get",
+        "swaggerDoc": "",
+        "x": 109,
+        "y": 246,
+        "wires": [
+            [
+                "937b4096.59c31"
+            ]
+        ]
+    },
+    {
+        "id": "937b4096.59c31",
+        "type": "function",
+        "z": "f0d2bda1.f5c1c",
+        "name": "HTML Form",
+        "func": "\nvar html = \"\\n\\\n<html>\\n\\\n<head>\\n\\\n<script \\n\\\n  src='//code.jquery.com/jquery-3.1.1.min.js' \\n\\\n  integrity='sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=' \\n\\\n  crossorigin='anonymous'></script>\\n\\\n<script>\\n\\\nvar token = 'vH8Yx1kA9fK0sj3oENhnrjow';\\n\\\n$(function() {\\n\\\n    $('#message').keypress(function (e) {\\n\\\n        if (e.which == 13) {\\n\\\n            submit();\\n\\\n            return false;\\n\\\n        }\\n\\\n    });\\n\\\n    \\\n    $('#submit').click(submit);\\n\\\n    \\\n    function submit() {\\n\\\n        var msg = $('#message').val();\\n\\\n        $('#messages').append('<li class=\\\"human\\\">' + msg + '</li>')\\n\\\n        $('#message').val(\\\"\\\")\\n\\\n        var options = {\\n\\\n            url:'/watson-chatbot',\\n\\\n            method:'POST',\\n\\\n            data:{text: msg, token: token}\\n\\\n        }\\n\\\n        $.ajax(options).done(function(res) {\\n\\\n            $('#messages').append('<li class=\\\"robot\\\">' + res + '</li>')\\n\\\n            $('#messages').parent().scrollTop($('#messages').parent()[0].scrollHeight);\\n\\\n        })\\n\\\n    }\\n\\\n})\\n\\\n</script>\\n\\\n<style>\\n\\\n#messages {padding: 0px;} \\n\\\n#messages li {list-style-type: none; padding: 10px 30px; }\\n\\\n#message {padding-left: 10px; float: left; width: calc(100% - 100px); height: 50px; font-size: 30px;} \\n\\\nli.human {color: green; text-align: right}\\n\\\nli.robot {color: red; text-align: left}\\n\\\n</style>\\n\\\n</head>\\n\\\n<body style='margin: 0px;'>\\n\\\n    <div style='height: calc(100% - 60px); overflow-y: scroll;'>\\n\\\n        <ul id='messages'></ul>\\n\\\n    </div>\\n\\\n    <div style='position: fixed; bottom: 20px; width: 100%; height: 40px;'>\\n\\\n        <input id='message'/>\\n\\\n        <input id='submit' type='submit' style='float: left; width: 100px; height: 50px; '/>\\n\\\n    </div>\\n\\\n</body>\\n\\\n</html>\\n\\\n\"\n\nmsg.payload = html;\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 283,
+        "y": 257,
+        "wires": [
+            [
+                "1fac2fa1.e1dba"
+            ]
+        ]
+    },
+    {
+        "id": "1fac2fa1.e1dba",
+        "type": "http response",
+        "z": "f0d2bda1.f5c1c",
+        "name": "",
+        "x": 470,
+        "y": 257,
+        "wires": []
+    },
+    {
+        "id": "b522b5b4.38c9c8",
+        "type": "ibmiot out",
+        "z": "f0d2bda1.f5c1c",
+        "authentication": "boundService",
+        "apiKey": "",
+        "outputType": "cmd",
+        "deviceId": "2244668800",
+        "deviceType": "Android",
+        "eventCommandType": "text",
+        "format": "json",
+        "data": "{\"d\":{\"value\":\"text\"}}",
+        "qos": 0,
+        "name": "IBM IoT",
+        "service": "registered",
+        "x": 1151,
+        "y": 199,
+        "wires": []
+    },
+    {
+        "id": "616dbd7c.8acc8c",
+        "type": "function",
+        "z": "f0d2bda1.f5c1c",
+        "name": "Color change",
+        "func": "var r = 0.0;\nvar b = 0.0;\nvar g = 0.0;\nmsg.payload = msg.payload.output.text + \"\";\nif (msg.payload == \"green\") {\n\tg = 255;\n} else if (msg.payload == \"blue\") {\n\tb = 200.0;\n} else {\n\tr = 100;\n\tg = 100;\n\tb = 100;\n}\na = 1.0;\n\nmsg.eventOrCommandType = \"color\";\nmsg.payload = JSON.stringify({\"d\":{\"r\":r,\"b\":b,\"g\":g,\"alpha\":a}});\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 935,
+        "y": 201,
+        "wires": [
+            [
+                "b522b5b4.38c9c8"
+            ]
+        ]
+    }
+]
